@@ -1,0 +1,26 @@
+A cascading configuration file object built on top of the ConfigParser
+
+Load a series of configuration files where later files shadow earlier
+
+For example loading 3 configuration files in order:
+
+1) default:
+    [main]
+    foo: 1
+    bar: 2
+    baz: 3
+2) user (~/.foo_module):
+    [main]
+    foo: 4
+    bar: 5
+3) local (./foo_module):
+    [main]
+    foo: 7
+
+Will result in:
+    foo == 7
+    bar == 5
+    baz == 3
+
+Also, parse command line options such as:
+    ./script.py main foo 10
