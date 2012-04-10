@@ -10,10 +10,27 @@ import sys
 
 class CConfig(ConfigParser.SafeConfigParser):
     """
+    A cascading configuration file parser that loads the following
+    configuration files:
+        base < user < local[s]
+
+    Settings in user will overwrite base, local will overwrite user.
     """
     def __init__(self, defaults=None, dict_type=collections.OrderedDict, \
             allow_no_value=False, base=None, user=None, local=None):
         """
+        Parameters
+        ----------
+        base : string, optional
+            base configuration, like the contents of an ini file
+        user : string, optional
+            user configuration, expanded with os.path.expanduser('~/%s')
+        local : string or tuple/list, optional
+            single or multiple local configurations
+
+        See Also
+        --------
+        ConfigParser.SafeConfigParser
         """
         ConfigParser.SafeConfigParser.__init__(self, defaults, dict_type, \
                 allow_no_value)
@@ -31,11 +48,19 @@ class CConfig(ConfigParser.SafeConfigParser):
 
     def read_base_config(self, base):
         """
+        Parameters
+        ----------
+        base : string
+            base configuration, like the contents of an ini file
         """
         self.readfp(io.BytesIO(base))
 
     def read_user_config(self, user):
         """
+        Parameters
+        ----------
+        user : string
+            user configuration, expanded with os.path.expanduser('~/%s')
         """
         filename = os.path.expanduser('~/%s' % user)
         if os.path.exists(filename):
@@ -45,6 +70,10 @@ class CConfig(ConfigParser.SafeConfigParser):
 
     def read_local_config(self, local):
         """
+        Parameters
+        ----------
+        local : string or tuple/list
+            single or multiple local configurations
         """
         if isinstance(local, (list, tuple)):
             for l in local:
@@ -58,5 +87,10 @@ class CConfig(ConfigParser.SafeConfigParser):
     def pretty_print(self, stream=sys.stdout):
         """
         Shortcut to print configuration contents to stdout
+
+        Parameters
+        ----------
+        stream : file pointer
+            where to print the configuration
         """
         self.write(stream)
