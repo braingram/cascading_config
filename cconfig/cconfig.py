@@ -46,14 +46,27 @@ class CConfig(ConfigParser.SafeConfigParser):
         # process command line
         pass
 
+    def read_string(self, string):
+        """
+        Parameters
+        ----------
+        string : str
+            string containing sections and options similar to an ini file
+        """
+        self.readfp(io.BytesIO(string))
+
     def read_base_config(self, base):
         """
         Parameters
         ----------
         base : string
             base configuration, like the contents of an ini file
+
+        See Also
+        --------
+        read_string
         """
-        self.readfp(io.BytesIO(base))
+        self.read_string(base)
 
     def read_user_config(self, user):
         """
