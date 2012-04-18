@@ -31,6 +31,7 @@ class TypedConfig(cmdconfig.CMDConfig):
                     value = eval('%s(%s)' % (vtype, svalue))
                 else:
                     value = svalue
+                    name = option
                 # name, value
                 self._sdict[section][name] = value
 
