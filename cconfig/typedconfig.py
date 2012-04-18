@@ -24,10 +24,10 @@ class TypedConfig(cmdconfig.CMDConfig):
         self._sdict = {}
         for section in self.sections():
             self._sdict[section] = {}
-            for option in self.options(section):
+            for option in cmdconfig.CMDConfig.options(self, section):
                 svalue = cmdconfig.CMDConfig.get(self, section, option)
-                if ('(' in option) and (')' in option):
-                    name, vtype = option.strip(')').split('(')
+                if ('[' in option) and (']' in option):
+                    name, vtype = option.strip(']').split('[')
                     value = eval('%s(%s)' % (vtype, svalue))
                 else:
                     value = svalue
@@ -44,7 +44,7 @@ class TypedConfig(cmdconfig.CMDConfig):
                 if type(value) == str:
                     cmdconfig.CMDConfig.set(self, section, name, value)
                 else:
-                    option = '%s(%s)' % (name, type(value).__name__)
+                    option = '%s[%s]' % (name, type(value).__name__)
                     cmdconfig.CMDConfig.set(self, section, option, str(value))
 
     def __init__(self, defaults=None, dict_type=collections.OrderedDict, \
@@ -117,7 +117,12 @@ class TypedConfig(cmdconfig.CMDConfig):
     #    pass
 
     def set(self, section, option, value):
-        self._sdict[section][option] = value
+        if ('[' in option) and (']' in option):
+            name, vtype = option.strip(']').split('[')
+            value = eval('%s(%s)' % (vtype, value))
+        else:
+            name = option
+        self._sdict[section][name] = value
         self.rparse()
 
     def write(self, fp):

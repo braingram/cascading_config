@@ -77,6 +77,8 @@ class CMDConfig(cconfig.CConfig):
                 val = val[1:]
             if val[-1] in ['"', "'"]:
                 val = val[:-1]
+            if section not in self.sections():
+                self.add_section(section)
             self.set(section, key, val)
             key = None
         if key is not None:
