@@ -21,9 +21,9 @@ class TypedConfig(cmdconfig.CMDConfig):
 
     """
     def parse(self):
-        self._sdict = {}
+        self._sdict = self._dict()
         for section in self.sections():
-            self._sdict[section] = {}
+            self._sdict[section] = self._dict()
             for option in cmdconfig.CMDConfig.options(self, section):
                 svalue = cmdconfig.CMDConfig.get(self, section, option)
                 if ('[' in option) and (']' in option):
@@ -62,7 +62,7 @@ class TypedConfig(cmdconfig.CMDConfig):
         ConfigParser.SafeConfigParser
         cconfig.CConfig
         """
-        self._sdict = {}
+        self._sdict = dict_type()
         cmdconfig.CMDConfig.__init__(self, defaults, dict_type, \
                 allow_no_value, base, user, local, options)
         self.parse()
@@ -80,7 +80,7 @@ class TypedConfig(cmdconfig.CMDConfig):
         return bool(self.get(section, option))
 
     def add_section(self, section):
-        self._sdict[section] = {}
+        self._sdict[section] = self._dict()
         self.rparse()
 
     def has_option(self, section, option):

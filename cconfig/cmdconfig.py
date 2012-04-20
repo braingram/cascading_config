@@ -20,7 +20,7 @@ class CMDConfig(cconfig.CConfig):
     """
     def __init__(self, defaults=None, dict_type=collections.OrderedDict, \
             allow_no_value=False, base=None, user=None, local=None,
-            options=sys.argv[1:]):
+            options=None):
         """
         Parameters
         ----------
@@ -34,6 +34,8 @@ class CMDConfig(cconfig.CConfig):
         """
         cconfig.CConfig.__init__(self, defaults, dict_type, \
                 allow_no_value, base, user, local)
+        if options is None:
+            options = sys.argv[1:]
         self.read_command_line(options)
 
     def read_command_line(self, options, starting_section='main'):
