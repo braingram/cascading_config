@@ -1,31 +1,47 @@
 #!/usr/bin/env python
 
 import collections
-import sys
 
+import cconfig
 import cmdconfig
 
 
-class TypedConfig(cmdconfig.CMDConfig):
+class TypedConfig(cconfig.CConfig):
     """
     A configuration file with parsable types
 
     Options are in the form:
-        name(type): value
+        name[type]: value
 
     With default type = str
 
     See Also
     --------
-    CMDConfig
+    CConfig
 
     """
+    def __init__(self, defaults=None, dict_type=collections.OrderedDict, \
+            allow_no_value=False, base=None, user=None, local=None):
+        """
+        Parameters
+        ----------
+
+        See Also
+        --------
+        ConfigParser.SafeConfigParser
+        cconfig.CConfig
+        """
+        self._sdict = dict_type()
+        cconfig.CConfig.__init__(self, defaults, dict_type, \
+                allow_no_value, base, user, local)
+        self.parse()
+
     def parse(self):
         self._sdict = self._dict()
         for section in self.sections():
             self._sdict[section] = self._dict()
-            for option in cmdconfig.CMDConfig.options(self, section):
-                svalue = cmdconfig.CMDConfig.get(self, section, option)
+            for option in cconfig.CConfig.options(self, section):
+                svalue = cconfig.CConfig.get(self, section, option)
                 if ('[' in option) and (']' in option):
                     name, vtype = option.strip(']').split('[')
                     value = eval('%s(%s)' % (vtype, svalue))
@@ -40,32 +56,13 @@ class TypedConfig(cmdconfig.CMDConfig):
             sdict = self._sdict
         for (section, options) in sdict.iteritems():
             if section not in self.sections():
-                cmdconfig.CMDConfig.add_section(self, section)
+                cconfig.CConfig.add_section(self, section)
             for (name, value) in options.iteritems():
                 if type(value) == str:
-                    cmdconfig.CMDConfig.set(self, section, name, value)
+                    cconfig.CConfig.set(self, section, name, value)
                 else:
                     option = '%s[%s]' % (name, type(value).__name__)
-                    cmdconfig.CMDConfig.set(self, section, option, str(value))
-
-    def __init__(self, defaults=None, dict_type=collections.OrderedDict, \
-            allow_no_value=False, base=None, user=None, local=None,
-            options=sys.argv[1:]):
-        """
-        Parameters
-        ----------
-        options : list of strings, optional
-            parsed by CMDConfig.read_command_line
-
-        See Also
-        --------
-        ConfigParser.SafeConfigParser
-        cconfig.CConfig
-        """
-        self._sdict = dict_type()
-        cmdconfig.CMDConfig.__init__(self, defaults, dict_type, \
-                allow_no_value, base, user, local, options)
-        self.parse()
+                    cconfig.CConfig.set(self, section, option, str(value))
 
     def get(self, section, option):
         return self._sdict[section][option]
@@ -99,11 +96,11 @@ class TypedConfig(cmdconfig.CMDConfig):
     #    pass
 
     def read(self, filenames):
-        cmdconfig.CMDConfig.read(self, filenames)
+        cconfig.CConfig.read(self, filenames)
         self.parse()
 
     def readfp(self, fp, filename=None):
-        cmdconfig.CMDConfig.readfp(self, fp, filename)
+        cconfig.CConfig.readfp(self, fp, filename)
         self.parse()
 
     def remove_option(self, section, option):
@@ -128,4 +125,25 @@ class TypedConfig(cmdconfig.CMDConfig):
 
     def write(self, fp):
         self.rparse()
-        cmdconfig.CMDConfig.write(self, fp)
+        cconfig.CConfig.write(self, fp)
+
+
+class TypedCMDConfig(TypedConfig, cmdconfig.CMDConfig):
+    def __init__(self, defaults=None, dict_type=collections.OrderedDict, \
+            allow_no_value=False, base=None, user=None, local=None,
+            options=None):
+        """
+        Parameters
+        ----------
+        options : list of strings, optional
+            parsed by CConfig.read_command_line
+
+        See Also
+        --------
+        ConfigParser.SafeConfigParser
+        cconfig.CConfig
+        """
+        self._sdict = dict_type()
+        cmdconfig.CMDConfig.__init__(self, defaults, dict_type, \
+                allow_no_value, base, user, local, options)
+        self.parse()

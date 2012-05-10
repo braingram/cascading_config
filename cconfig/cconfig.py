@@ -59,43 +59,52 @@ class CConfig(ConfigParser.SafeConfigParser):
         """
         Parameters
         ----------
-        base : string
+        base : file or string
             base configuration, like the contents of an ini file
 
         See Also
         --------
         read_string
         """
-        self.read_string(base)
+        if hasattr(base, "read"):
+            self.readfp(base)
+        else:
+            self.read_string(base)
 
     def read_user_config(self, user):
         """
         Parameters
         ----------
-        user : string
+        user : file or string
             user configuration, expanded with os.path.expanduser('~/%s')
         """
-        filename = os.path.expanduser('~/%s' % user)
-        if os.path.exists(filename):
-            self.read(filename)
+        if hasattr(user, "read"):
+            self.readfp(user)
         else:
-            logging.warning('No user config: %s' % filename)
+            filename = os.path.expanduser('~/%s' % user)
+            if os.path.exists(filename):
+                self.read(filename)
+            else:
+                logging.warning('No user config: %s' % filename)
 
     def read_local_config(self, local):
         """
         Parameters
         ----------
-        local : string or tuple/list
+        local : file, string or tuple/list
             single or multiple local configurations
         """
         if isinstance(local, (list, tuple)):
             for l in local:
                 self.read_local_config(self, l)
         else:
-            if os.path.exists(local):
-                self.read(local)
+            if hasattr(local, "read"):
+                self.readfp(local)
             else:
-                logging.warning('No local config: %s' % local)
+                if os.path.exists(local):
+                    self.read(local)
+                else:
+                    logging.warning('No local config: %s' % local)
 
     def pretty_print(self, stream=sys.stdout):
         """
