@@ -96,7 +96,7 @@ class CConfig(ConfigParser.SafeConfigParser):
         """
         if isinstance(local, (list, tuple)):
             for l in local:
-                self.read_local_config(self, l)
+                self.read_local_config(l)
         else:
             if hasattr(local, "read"):
                 self.readfp(local)
