@@ -69,7 +69,10 @@ class CConfig(ConfigParser.SafeConfigParser):
         if hasattr(base, "read"):
             self.readfp(base)
         else:
-            self.read_string(base)
+            if os.path.exists(base):
+                self.read(base)
+            else:
+                self.read_string(base)
 
     def read_user_config(self, user):
         """
