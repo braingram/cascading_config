@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import collections
+import copy
 import ConfigParser
 import io
 import logging
@@ -119,3 +120,11 @@ class CConfig(ConfigParser.SafeConfigParser):
             where to print the configuration
         """
         self.write(stream)
+
+    def as_dict(self):
+        d = {}
+        for s, sv in self._sdict.iteritems():
+            d[s] = {}
+            for o, ov in sv.iteritems():
+                d[s][o] = copy.deepcopy(ov)
+        return d
