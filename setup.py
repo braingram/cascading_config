@@ -46,23 +46,23 @@ except ImportError:
     # distribute_setup.py was not in this directory
     if not (setup_tools_fallback):
         import setuptools
-        if not (hasattr(setuptools, '_distribute') and \
+        if not (hasattr(setuptools, '_distribute') and
                 setuptools._distribute):
-            raise ImportError(\
-                    "distribute was not found and fallback " \
-                    "to setuptools was not allowed")
+            raise ImportError(
+                "distribute was not found and fallback "
+                "to setuptools was not allowed")
         else:
-            logging.debug("distribute_setup.py not found, \
-                    defaulted to system distribute")
+            logging.debug("distribute_setup.py not found,"
+                          "defaulted to system distribute")
     else:
-        logging.debug("distribute_setup.py not found, " \
-                "defaulting to system setuptools")
+        logging.debug("distribute_setup.py not found, "
+                      "defaulting to system setuptools")
 
 import setuptools
 
 
 def find_scripts():
-    return [s for s in setuptools.findall('scripts/') \
+    return [s for s in setuptools.findall('scripts/')
             if os.path.splitext(s)[1] != '.pyc']
 
 
@@ -121,8 +121,8 @@ def find_package_data(packages):
             if skip_tests and (subdir == 'tests'):  # skip tests
                 logging.debug("skipping tests %s/%s" % (package, subdir))
                 continue
-            package_data[package] += \
-                    subdir_findall(package_to_path(package), subdir)
+            package_data[package] += subdir_findall(
+                package_to_path(package), subdir)
     return package_data
 
 
@@ -137,8 +137,8 @@ def parse_requirements(file_name):
             if re.match(r'(\s*#)|(\s*$)', line):
                 continue
             if re.match(r'\s*-e\s+', line):
-                requirements.append(re.sub(r'\s*-e\s+.*#egg=(.*)$',\
-                        r'\1', line).strip())
+                requirements.append(re.sub(r'\s*-e\s+.*#egg=(.*)$',
+                                           r'\1', line).strip())
             elif re.match(r'\s*-f\s+', line):
                 pass
             else:
@@ -155,8 +155,8 @@ def parse_dependency_links(file_name):
     with open(file_name) as f:
         for line in f:
             if re.match(r'\s*-[ef]\s+', line):
-                dependency_links.append(re.sub(r'\s*-[ef]\s+',\
-                        '', line))
+                dependency_links.append(re.sub(r'\s*-[ef]\s+',
+                                               '', line))
     return dependency_links
 
 # ----------- Override defaults here ----------------
@@ -207,6 +207,8 @@ if debug:
 setuptools.setup(
     name=package_name,
     version='1.2.1',
+    description="Cascading configuration file for python",
+    url="https://github.com/braingram/cascading_config",
     packages=packages,
     scripts=scripts,
 

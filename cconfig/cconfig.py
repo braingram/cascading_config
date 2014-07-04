@@ -17,8 +17,8 @@ class CConfig(ConfigParser.SafeConfigParser):
 
     Settings in user will overwrite base, local will overwrite user.
     """
-    def __init__(self, defaults=None, dict_type=collections.OrderedDict, \
-            allow_no_value=False, base=None, user=None, local=None):
+    def __init__(self, defaults=None, dict_type=collections.OrderedDict,
+                 allow_no_value=False, base=None, user=None, local=None):
         """
         Parameters
         ----------
@@ -33,8 +33,8 @@ class CConfig(ConfigParser.SafeConfigParser):
         --------
         ConfigParser.SafeConfigParser
         """
-        ConfigParser.SafeConfigParser.__init__(self, defaults, dict_type, \
-                allow_no_value)
+        ConfigParser.SafeConfigParser.__init__(self, defaults, dict_type,
+                                               allow_no_value)
         # process base
         if base is not None:
             self.read_base_config(base)

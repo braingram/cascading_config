@@ -7,7 +7,7 @@ import cconfig
 
 def get_assert(c, s, k, v):
     assert c.get(s, k) == v, "[%s]%s{=%s} != %s in %s" \
-            % (s, k, c.get(s, k), v, c)
+        % (s, k, c.get(s, k), v, c)
 
 base = """
 [main]
@@ -40,8 +40,8 @@ b: 55
 
 def test_cconfig():
     print "CConfig"
-    c = cconfig.CConfig(base=io.BytesIO(base), user=io.BytesIO(user), \
-            local=io.BytesIO(local))
+    c = cconfig.CConfig(base=io.BytesIO(base), user=io.BytesIO(user),
+                        local=io.BytesIO(local))
     c.pretty_print()
 
     for k, v in (('a', '1'), ('b', '22'), ('c', '33')):
@@ -55,8 +55,8 @@ def test_cmdconfig():
     print "CMDConfig"
     args = ["a", "11", "foo", "c", "66"]
 
-    c = cconfig.CMDConfig(base=io.BytesIO(base), user=io.BytesIO(user), \
-            local=io.BytesIO(local), options=args)
+    c = cconfig.CMDConfig(base=io.BytesIO(base), user=io.BytesIO(user),
+                          local=io.BytesIO(local), options=args)
     c.pretty_print()
 
     for k, v in (('a', '11'), ('b', '22'), ('c', '33')):
@@ -87,8 +87,8 @@ def test_typedcmdconfig():
     tuser = io.BytesIO(user.replace(':', '[int]:'))
     tlocal = io.BytesIO(local.replace(':', '[int]:'))
     args = ["a[int]", "11", "foo", "c[int]", "66"]
-    c = cconfig.TypedCMDConfig(base=tbase, user=tuser, local=tlocal, \
-            options=args)
+    c = cconfig.TypedCMDConfig(base=tbase, user=tuser, local=tlocal,
+                               options=args)
     c.pretty_print()
 
     for k, v in (('a', '11'), ('b', '22'), ('c', '33')):

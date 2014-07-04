@@ -20,8 +20,8 @@ class TypedConfig(cconfig.CConfig):
     CConfig
 
     """
-    def __init__(self, defaults=None, dict_type=collections.OrderedDict, \
-            allow_no_value=False, base=None, user=None, local=None):
+    def __init__(self, defaults=None, dict_type=collections.OrderedDict,
+                 allow_no_value=False, base=None, user=None, local=None):
         """
         Parameters
         ----------
@@ -32,8 +32,8 @@ class TypedConfig(cconfig.CConfig):
         cconfig.CConfig
         """
         self._sdict = dict_type()
-        cconfig.CConfig.__init__(self, defaults, dict_type, \
-                allow_no_value, base, user, local)
+        cconfig.CConfig.__init__(self, defaults, dict_type,
+                                 allow_no_value, base, user, local)
         self.parse()
 
     def parse(self):
@@ -83,7 +83,7 @@ class TypedConfig(cconfig.CConfig):
     def has_option(self, section, option):
         return option in self._sdict[section]
 
-    #def has_section(self, section):
+    # def has_section(self, section):
     #    pass
 
     def items(self, section):
@@ -92,7 +92,7 @@ class TypedConfig(cconfig.CConfig):
     def options(self, section):
         return self._sdict[section].keys()
 
-    #def optionxform(self, optionstr):
+    # def optionxform(self, optionstr):
     #    pass
 
     def read(self, filenames):
@@ -111,7 +111,7 @@ class TypedConfig(cconfig.CConfig):
         del self._sdict[section]
         self.rparse()
 
-    #def sections(self):
+    # def sections(self):
     #    pass
 
     def set(self, section, option, value):
@@ -129,9 +129,9 @@ class TypedConfig(cconfig.CConfig):
 
 
 class TypedCMDConfig(TypedConfig, cmdconfig.CMDConfig):
-    def __init__(self, defaults=None, dict_type=collections.OrderedDict, \
-            allow_no_value=False, base=None, user=None, local=None,
-            options=None):
+    def __init__(self, defaults=None, dict_type=collections.OrderedDict,
+                 allow_no_value=False, base=None, user=None, local=None,
+                 options=None):
         """
         Parameters
         ----------
@@ -144,6 +144,7 @@ class TypedCMDConfig(TypedConfig, cmdconfig.CMDConfig):
         cconfig.CConfig
         """
         self._sdict = dict_type()
-        cmdconfig.CMDConfig.__init__(self, defaults, dict_type, \
-                allow_no_value, base, user, local, options)
+        cmdconfig.CMDConfig.__init__(self, defaults, dict_type,
+                                     allow_no_value, base, user,
+                                     local, options)
         self.parse()
