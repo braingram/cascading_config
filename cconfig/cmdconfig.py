@@ -18,9 +18,9 @@ class CMDConfig(cconfig.CConfig):
     CMDConfig.read_command_line
 
     """
-    def __init__(self, defaults=None, dict_type=collections.OrderedDict, \
-            allow_no_value=False, base=None, user=None, local=None,
-            options=None):
+    def __init__(self, defaults=None, dict_type=collections.OrderedDict,
+                 allow_no_value=False, base=None, user=None, local=None,
+                 options=None):
         """
         Parameters
         ----------
@@ -32,8 +32,8 @@ class CMDConfig(cconfig.CConfig):
         ConfigParser.SafeConfigParser
         cconfig.CConfig
         """
-        cconfig.CConfig.__init__(self, defaults, dict_type, \
-                allow_no_value, base, user, local)
+        cconfig.CConfig.__init__(self, defaults, dict_type,
+                                 allow_no_value, base, user, local)
         if options is None:
             options = sys.argv[1:]
         self.read_command_line(options)
@@ -84,5 +84,5 @@ class CMDConfig(cconfig.CConfig):
             self.set(section, key, val)
             key = None
         if key is not None:
-            raise AttributeError("Key [%s] missing value [section:%s]" % \
-                    (key, section))
+            raise AttributeError("Key [%s] missing value [section:%s]" %
+                                 (key, section))
